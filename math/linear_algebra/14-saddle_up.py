@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 '''
-    A function def np_elementwise(mat1, mat2)
-    that performs element-wise addition,
-    subtraction, multiplication, and division:
+    A function def np_matmul(mat1, mat2):
+    that performs matrix multiplication
 '''
 
 
-def np_elementwise(mat1, mat2):
+import numpy as np
+
+
+def np_matmul(mat1, mat2):
     '''
-        A function def np_elementwise(mat1, mat2)
-        that performs element-wise addition,
-        subtraction, multiplication, and division:
+        Multiply two Matrices
     '''
-    return (mat1 + mat2, mat1 - mat2, mat1 * mat2, mat1 / mat2)
+    return np.matmul(mat1, mat2)
