@@ -43,9 +43,7 @@ def determinant(matrix):
     # Recursive case for matrices larger than 1x1
     det = 0
     for col in range(num_rows):
-        # Create the minor matrix by excluding current row and column
         minor = [row[:col] + row[col + 1:] for row in matrix[1:]]
-        # Cofactor expansion along the first row
         cofactor = (-1) ** col * matrix[0][col] * determinant(minor)
         det += cofactor
 
