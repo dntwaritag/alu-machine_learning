@@ -1,62 +1,44 @@
 #!/usr/bin/env python3
-"""
-Module for calculating the minor matrix of a given matrix.
-"""
+"""Function that calculates the minor matrix of a matrix"""
 
 
 def determinant(matrix):
-    """
-    Calculates the determinant of a matrix.
-
-    Args:
-        matrix (list): A square matrix represented as a list of lists.
-
-    Returns:
-        int: The determinant of the matrix.
-    """
-    if len(matrix) == 1:
-        return matrix[0][0]
+    """Function that calculates the determinant of a matrix"""
     if len(matrix) == 2:
-        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-
-    det = 0
+        return ((matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]))
+    det = []
     for i in range(len(matrix)):
-        mini = [row[:i] + row[i + 1:] for row in matrix[1:]]
-        det += ((-1) ** i) * matrix[0][i] * determinant(mini)
-    return det
+        mini = [[j for j in matrix[i]] for i in range(1, len(matrix))]
+        for j in range(len(mini)):
+            mini[j].pop(i)
+        if i % 2 == 0:
+            det.append(matrix[0][i] * determinant(mini))
+        if i % 2 == 1:
+            det.append(-1 * matrix[0][i] * determinant(mini))
+    return sum(det)
 
 
 def minor(matrix):
-    """
-    Calculates the minor matrix of a given matrix.
-
-    Args:
-        matrix (list of lists): The matrix to calculate the minor for.
-
-    Raises:
-        TypeError: If matrix is not a list of lists.
-        ValueError: If matrix is not square or is empty.
-
-    Returns:
-        list of lists: The minor matrix of the given matrix.
-    """
-    if not all(isinstance(row, list) for row in matrix) or not isinstance(matrix, list):
+    """Function that calculates the minor matrix of a matrix"""
+    if type(matrix) is not list or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
-
-    if len(matrix) == 0 or any(len(row) != len(matrix) for row in matrix):
-        raise ValueError("matrix must be a non-empty square matrix")
-
-    if len(matrix) == 1 and len(matrix[0]) == 1:
+    for i in matrix:
+        if type(i) is not list:
+            raise TypeError("matrix must be a list of lists")
+    for i in matrix:
+        if len(matrix) != len(i):
+            raise ValueError("matrix must be a non-empty square matrix")
+    if len(matrix) == 1 and len(matrix) == 1:
         return [[1]]
-
-    minor_matrix = []
+    if len(matrix) == 2:
+        minor = [i[::-1] for i in matrix]
+        return minor[::-1]
+    minor = [[j for j in matrix[i]] for i in range(len(matrix))]
     for i in range(len(matrix)):
-        minor_row = []
-        for j in range(len(matrix)):
-            # Adjusting line length for compliance
-            submatrix = [row[:j] + row[j + 1:]
-                         for k, row in enumerate(matrix) if k != i]
-            minor_row.append(determinant(submatrix))
-        minor_matrix.append(minor_row)
-
-    return minor_matrix
+        for j in range(len(matrix[i])):
+            mini = [[j for j in matrix[i]] for i in range(len(matrix))]
+            mini = mini[:i] + mini[i + 1:]
+            for k in range(len(mini)):
+                mini[k].pop(j)
+            minor[i][j] = determinant(mini)
+    return minor
