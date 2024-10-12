@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create a class Binomial that represents a binomial distribution
+"""Initiate a class Binomial that represents a binomial distribution
 """
 
 
