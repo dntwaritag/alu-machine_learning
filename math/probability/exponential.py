@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create a class Exponential that represents an
+"""Initiate a class Exponential that represents an
 exponential distribution"""
 
 
