@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create a class Normal that represents a normal distribution
+"""Initiate a class Normal that represents a normal distribution
 """
 
 
