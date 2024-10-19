@@ -4,27 +4,27 @@
     a multivariate normal (Gaussian) distribution.
 """
 
+
 import numpy as np
+
 
 class MultiNormal:
     """
-    A class to model a multivariate normal distribution.
+    class MultiNormal that represents.
     """
 
     def __init__(self, data):
         """
-        Initializes the MultiNormal instance with the given data.
-
         Args:
-            data: A numpy array of shape (n, d) representing
+             data: A numpy array of shape (n, d) representing
                   the data set, where n is the number of dimensions
                   and d is the number of data points.
         """
-        if not isinstance(data, np.ndarray) or len(data.shape) != 2:
-            raise TypeError("data must be a 2D numpy array")
+        if type(data) is not np.ndarray or len(data.shape) != 2:
+            raise TypeError("data must be a 2D numpy.ndarray")
         d, n = data.shape
         if n < 2:
-            raise ValueError("data must contain more than one data point")
+            raise ValueError("data must contain multiple data points")
 
         self.data = data
         mean = np.mean(data, axis=1, keepdims=True)
@@ -44,14 +44,14 @@ class MultiNormal:
         Returns:
             The value of the PDF evaluated at x.
         """
-        if not isinstance(x, np.ndarray):
-            raise TypeError("x must be a numpy array")
+        if type(x) is not np.ndarray:
+            raise TypeError("x must be a numpy.ndarray")
         d = self.cov.shape[0]
         if len(x.shape) != 2:
-            raise ValueError(f"x must have the shape ({d}, 1)")
+            raise ValueError("x must have the shape ({}, 1)".format(d))
         test_d, one = x.shape
         if test_d != d or one != 1:
-            raise ValueError(f"x must have the shape ({d}, 1)")
+            raise ValueError("x must have the shape ({}, 1)".format(d))
 
         det = np.linalg.det(self.cov)
         inv = np.linalg.inv(self.cov)
