@@ -6,10 +6,7 @@ import numpy as np
 
 
 '''This function calculates the same convolution of grayscale images'''
-
-
-def convolve_grayscale(images, kernel,
-                       padding='same', stride=(1, 1)):
+def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     '''
     Performs a convolution on grayscale images.
 
@@ -39,10 +36,13 @@ def convolve_grayscale(images, kernel,
     else:
         ph, pw = padding
 
-    # Apply padding
-    padded_images = np.pad(
-        images, ((0, 0), (ph, ph), (pw, pw)),
-        mode='constant', constant_values=0)
+    # Apply padding (only if ph or pw is greater than 0)
+    if ph > 0 or pw > 0:
+        padded_images = np.pad(
+            images, ((0, 0), (ph, ph), (pw, pw)),
+            mode='constant', constant_values=0)
+    else:
+        padded_images = images
 
     # Calculate dimensions of the output image
     new_h = (h + 2 * ph - kh) // sh + 1
@@ -55,8 +55,7 @@ def convolve_grayscale(images, kernel,
     for i in range(new_h):
         for j in range(new_w):
             convolved_images[:, i, j] = np.sum(
-                padded_images[:, i*sh:i*sh+kh,
-                              j*sw:j*sw+kw] *
-                kernel, axis=(1, 2))
+                padded_images[:, i * sh:i * sh + kh, j * sw:j * sw + kw] * kernel,
+                axis=(1, 2))
 
     return convolved_images
