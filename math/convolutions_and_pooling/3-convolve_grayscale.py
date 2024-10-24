@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 
-'''This script performs a same convolution on grayscale images'''
+"""This script performs a same convolution on grayscale images""""
 
 import numpy as np
 
 
-'''This function calculates the same convolution of grayscale images'''
 def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
-
-
-    '''
-    Performs a convolution on grayscale images.
+    """Performs a convolution on grayscale images.
 
     Args:
         images (numpy.ndarray): Shape (m, h, w),
@@ -24,7 +20,7 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
 
     Returns:
         numpy.ndarray: The convolved images.
-    '''
+    """
     m, h, w = images.shape
     kh, kw = kernel.shape
     sh, sw = stride
