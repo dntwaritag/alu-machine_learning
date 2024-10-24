@@ -7,6 +7,8 @@ import numpy as np
 
 '''This function calculates the same convolution of grayscale images'''
 def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
+
+
     '''
     Performs a convolution on grayscale images.
 
