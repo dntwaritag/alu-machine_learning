@@ -91,4 +91,3 @@ class Neuron:
         predictions = np.where(A >= 0.5, 1, 0)
         cost = self.cost(Y, A)
         return predictions, cost
-    

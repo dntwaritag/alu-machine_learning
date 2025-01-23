@@ -108,4 +108,3 @@ class Neuron:
         db = (1 / m) * (np.sum(error))
         self.__W = self.__W - (alpha * dW)
         self.__b = self.__b - (alpha * db)
-        

@@ -108,4 +108,3 @@ class DeepNeuralNetwork:
             self.__weights["b{}".format(i + 1)] -= alpha * db
             self.__cache["A{}".format(i)] = A
         return self.__weights, self.__cache
-    

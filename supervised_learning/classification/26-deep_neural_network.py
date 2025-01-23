@@ -178,4 +178,3 @@ class DeepNeuralNetwork:
                 return obj
         except FileNotFoundError:
             return None
-        
