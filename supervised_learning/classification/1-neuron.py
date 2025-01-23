@@ -38,7 +38,7 @@ class Neuron:
     def A(self):
         '''Getter for Activation function'''
         return self.__A
-    
+
     def forward_prop(self, X):
         """
         Calculates the forward propagation of the neuron.
@@ -53,9 +53,9 @@ class Neuron:
         """
         # Linear combination Z = W.X + b
         Z = np.dot(self.__W, X) + self.__b
-        
+
         # Sigmoid activation function A = 1 / (1 + e^(-Z))
         self.__A = 1 / (1 + np.exp(-Z))
-        
+
         return self.__A
     
