@@ -58,4 +58,3 @@ class Neuron:
         self.__A = 1 / (1 + np.exp(-Z))
 
         return self.__A
-    
