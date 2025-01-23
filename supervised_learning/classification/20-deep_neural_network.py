@@ -1,60 +1,90 @@
 #!/usr/bin/env python3
-'''This class is a single neuron for binary classification'''
+"""
+    A class DeepNeuralNetwork that defines a deep neural
+    network performing binary classification
+"""
 
 import numpy as np
 
 
-class Neuron:
+class DeepNeuralNetwork:
     """
-        Initialize a Neuron performing binary classification.
+    A class DeepNeuralNetwork
+    """
 
-        Args:
-            nx (int): The number of input features to the neuron.
-        Raises:
-            TypeError: If nx is not an integer.
-            ValueError: If nx is less than 1.
-        """
-
-    def __init__(self, nx):
+    def __init__(self, nx, layers):
+        ''' DeepNeuralNetwork class constructor'''
         if not isinstance(nx, int):
-            raise TypeError('nx must be an integer')
+            raise TypeError("nx must be an integer")
         if nx < 1:
-            raise ValueError('nx must be a positive integer')
-        self.__W = np.random.randn(1, nx)
-        self.__b = 0
-        self.__A = 0
+            raise ValueError("nx must be a positive integer")
+        if not isinstance(layers, list) or len(layers) == 0:
+            raise TypeError("layers must be a list of positive integers")
+
+        self.__L = len(layers)
+        self.__cache = {}
+        self.__weights = {}
+        self.nx = nx
+        self.layers = layers
+
+        # Initialize weights and biases and validate layers in one loop
+        for i in range(self.__L):
+            if not isinstance(layers[i], int) or layers[i] < 1:
+                raise TypeError("layers must be a list of positive integers")
+            if i == 0:
+                self.__weights["W1"] = (
+                    np.random.randn(layers[i], nx) * np.sqrt(2 / nx))
+            else:
+                self.__weights["W" + str(i + 1)] = np.random.randn(
+                    layers[i], layers[i - 1]
+                ) * np.sqrt(2 / layers[i - 1])
+            self.__weights["b" + str(i + 1)] = np.zeros((layers[i], 1))
+
+    # create the getter functions of the deep network
+    @property
+    def L(self):
+        ''' return the L attribute'''
+        return self.__L
 
     @property
-    def W(self):
-        '''Getter for Weights'''
-        return self.__W
+    def cache(self):
+        ''' return the cache attribute'''
+        return self.__cache
 
     @property
-    def b(self):
-        '''Getter for Bias'''
-        return self.__b
-
-    @property
-    def A(self):
-        '''Getter for Activation function'''
-        return self.__A
+    def weights(self):
+        ''' return the weights attribute'''
+        return self.__weights
 
     def forward_prop(self, X):
-        """
-        Calculates the forward propagation of the neuron.
+        '''
+            Calculates the forward propagation of
+            the deep neural network
+        '''
+        self.__cache["A0"] = X
+        for i in range(self.__L):
+            W = self.__weights["W{}".format(i + 1)]
+            b = self.__weights["b{}".format(i + 1)]
+            A = self.__cache["A{}".format(i)]
+            Z = np.matmul(W, A) + b
+            self.__cache["A{}".format(i + 1)] = 1 / (1 + np.exp(-Z))
 
-        Args:
-            X (numpy.ndarray): Input data of shape (nx, m), where
-            nx is the number of input features
-            and m is the number of examples.
+        return self.__cache["A{}".format(self.__L)], self.__cache
 
-        Returns:
-            numpy.ndarray: The activated output of the neuron (A).
-        """
-        # Linear combination Z = W.X + b
-        Z = np.dot(self.__W, X) + self.__b
+    def cost(self, Y, A):
+        '''
+            Calculates the cost of the model
+        '''
+        m = Y.shape[1]
+        cost = - (1 / m) * np.sum(Y * np.log(A) +
+                                  (1 - Y) * np.log(1.0000001 - A))
+        return cost
 
-        # Sigmoid activation function A = 1 / (1 + e^(-Z))
-        self.__A = 1 / (1 + np.exp(-Z))
-
-        return self.__A
+    def evaluate(self, X, Y):
+        '''
+            Evaluates the deep neural network
+        '''
+        A, _ = self.forward_prop(X)
+        cost = self.cost(Y, A)
+        A = np.where(A >= 0.5, 1, 0)
+        return A, cost
