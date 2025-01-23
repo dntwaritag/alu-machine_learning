@@ -84,3 +84,4 @@ class NeuralNetwork:
         cost = - (1 / m) * np.sum(Y * np.log(A) +
                                   (1 - Y) * np.log(1.0000001 - A))
         return cost
+    

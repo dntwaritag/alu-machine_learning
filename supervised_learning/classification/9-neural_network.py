@@ -67,3 +67,4 @@ class NeuralNetwork:
     def A2(self):
         '''getter'''
         return self.__A2
+    

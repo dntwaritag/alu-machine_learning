@@ -152,3 +152,4 @@ class DeepNeuralNetwork:
             plt.ylabel("cost")
             plt.show()
         return self.evaluate(X, Y)
+    

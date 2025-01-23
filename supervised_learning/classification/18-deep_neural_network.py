@@ -70,3 +70,4 @@ class DeepNeuralNetwork:
             self.__cache["A{}".format(i + 1)] = 1 / (1 + np.exp(-Z))
 
         return self.__cache["A{}".format(self.__L)], self.__cache
+    

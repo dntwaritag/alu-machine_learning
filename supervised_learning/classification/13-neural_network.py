@@ -106,3 +106,4 @@ class NeuralNetwork:
         self.__b2 -= (alpha * db2)
         self.__W1 -= (alpha * dw1)
         self.__b1 -= (alpha * db1)
+        

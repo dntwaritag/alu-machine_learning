@@ -55,3 +55,4 @@ class DeepNeuralNetwork:
     def weights(self):
         ''' return the weights attribute'''
         return self.__weights
+    

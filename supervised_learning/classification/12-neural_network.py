@@ -92,3 +92,4 @@ class NeuralNetwork:
         predictions = np.where(A2 >= 0.5, 1, 0)
         cost = self.cost(Y, A2)  # Calculate the cost based on predictions
         return predictions, cost
+    

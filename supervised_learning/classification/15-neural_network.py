@@ -165,3 +165,4 @@ class NeuralNetwork:
         # Return the evaluation (predictions and cost)
         # after the final iteration.
         return self.evaluate(X, Y)
+    

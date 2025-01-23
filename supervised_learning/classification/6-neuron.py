@@ -133,3 +133,4 @@ class Neuron:
             self.__A = self.forward_prop(X)
             self.gradient_descent(X, Y, self.__A, alpha)
         return self.evaluate(X, Y)
+    
