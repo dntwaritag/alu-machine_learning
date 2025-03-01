@@ -1,31 +1,19 @@
-#!/usr/bin/env python3
-"""Pipeline Api"""
 import requests
 from datetime import datetime
 
+def get_upcoming_launch():
+    url = 'https://api.spacexdata.com/v4/launches/upcoming'
+    response = requests.get(url).json()
 
-if __name__ == '__main__':
-    """pipeline api"""
-    url = "https://api.spacexdata.com/v4/launches/upcoming"
-    r = requests.get(url)
-    recent = 0
+    upcoming_launch = sorted(response, key=lambda x: x['date_unix'])[0]
 
-    for dic in r.json():
-        new = int(dic["date_unix"])
-        if recent == 0 or new < recent:
-            recent = new
-            launch_name = dic["name"]
-            date = dic["date_local"]
-            rocket_number = dic["rocket"]
-            launch_number = dic["launchpad"]
+    launch_name = upcoming_launch['name']
+    launch_date = datetime.utcfromtimestamp(upcoming_launch['date_unix']).strftime('%Y-%m-%dT%H:%M:%S')
+    rocket_name = upcoming_launch['rocket']['name']
+    launchpad_name = upcoming_launch['launchpad']['name']
+    launchpad_locality = upcoming_launch['launchpad']['locality']
 
-    rurl = "https://api.spacexdata.com/v4/rockets/" + rocket_number
-    rocket_name = requests.get(rurl).json()["name"]
-    lurl = "https://api.spacexdata.com/v4/launchpads/" + launch_number
-    launchpad = requests.get(lurl)
-    launchpad_name = launchpad.json()["name"]
-    launchpad_local = launchpad.json()["locality"]
-    string = "{} ({}) {} - {} ({})".format(launch_name, date, rocket_name,
-                                           launchpad_name, launchpad_local)
+    print(f"{launch_name} ({launch_date}) {rocket_name} - {launchpad_name} ({launchpad_locality})")
 
-    print(string)
+if __name__ == "__main__":
+    get_upcoming_launch()
