@@ -1,40 +1,22 @@
 #!/usr/bin/env python3
-"""
-    Script that displays the number of launches per rocket.
-"""
-
+"""Pipeline Api"""
 import requests
-from collections import Counter
 
 
-def get_launch_count_by_rocket():
-    """
-    Get all launches and count them per rocket.
-    """
+if __name__ == '__main__':
+    """pipeline api"""
     url = "https://api.spacexdata.com/v4/launches"
-    response = requests.get(url)
-    launches = response.json()
+    r = requests.get(url)
+    rocket_dict = {"5e9d0d95eda69955f709d1eb": 0}
 
-    # Count the launches per rocket ID
-    rocket_counts = Counter(launch["rocket"] for launch in launches)
+    for launch in r.json():
+        if launch["rocket"] in rocket_dict:
+            rocket_dict[launch["rocket"]] += 1
+        else:
+            rocket_dict[launch["rocket"]] = 1
+    for key, value in sorted(rocket_dict.items(),
+                             key=lambda kv: kv[1], reverse=True):
+        rurl = "https://api.spacexdata.com/v4/rockets/" + key
+        req = requests.get(rurl)
 
-    # Get rocket names
-    url = "https://api.spacexdata.com/v4/rockets"
-    response = requests.get(url)
-    rockets = response.json()
-    rocket_names = {rocket["id"]: rocket["name"] for rocket in rockets}
-
-    # Create a list of (rocket_name, count) and sort it
-    rocket_launch_counts = [
-        (rocket_names[rocket_id], count)
-        for rocket_id, count in rocket_counts.items()
-    ]
-    rocket_launch_counts.sort(key=lambda x: (-x[1], x[0]))
-
-    return rocket_launch_counts
-
-
-if __name__ == "__main__":
-    rocket_launch_counts = get_launch_count_by_rocket()
-    for rocket_name, count in rocket_launch_counts:
-        print("{}: {}".format(rocket_name, count))
+        print(req.json()["name"] + ": " + str(value))
