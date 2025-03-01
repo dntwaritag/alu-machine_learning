@@ -23,3 +23,4 @@ if __name__ == "__main__":
     elif res.status_code == 200:
         res = res.json()
         print(res['location'])
+        
