@@ -5,7 +5,7 @@ Prints the location of a user
 
 
 import sys
-import requests
+import requests # get
 import time
 
 
