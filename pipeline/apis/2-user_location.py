@@ -32,7 +32,8 @@ def get_user_location(api_url):
                 response.headers.get('X-RateLimit-Reset', time.time()))
             current_time = int(time.time())
             wait_time = (reset_time - current_time) // 60
-            print('Reset in {} min'.format(wait_time))
+            print('Reset in {} min'.format(wait_time * 60))
+            get_user_location(api_url)  # Retry the request
         else:
             print('Error: {}'.format(response.status_code))
     except requests.RequestException as e:
