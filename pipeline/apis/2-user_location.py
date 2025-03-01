@@ -3,7 +3,7 @@
 
 """ Return list of ships"""
 
-import requests # type: ignore
+import requests
 import sys
 import time
 
@@ -23,4 +23,3 @@ if __name__ == "__main__":
     elif res.status_code == 200:
         res = res.json()
         print(res['location'])
-
