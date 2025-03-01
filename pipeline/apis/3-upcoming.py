@@ -1,19 +1,64 @@
+#!/usr/bin/env python3
+'''
+    Script that displays the upcoming launch
+'''
+
+
 import requests
-from datetime import datetime
+import datetime
+
 
 def get_upcoming_launch():
+    '''
+    Prints upcoming SpaceX launch
+
+    Output info:
+    - Name of the launch
+    - The date (in local time)
+    - The rocket name
+    - The name (with the locality) of the launchpad
+    '''
+
     url = 'https://api.spacexdata.com/v4/launches/upcoming'
-    response = requests.get(url).json()
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        launches = response.json()
 
-    upcoming_launch = sorted(response, key=lambda x: x['date_unix'])[0]
+        # Sort dict using date_unix
+        upcoming_launch = sorted(launches, key=lambda x: x['date_unix'])[0]
 
-    launch_name = upcoming_launch['name']
-    launch_date = datetime.utcfromtimestamp(upcoming_launch['date_unix']).strftime('%Y-%m-%dT%H:%M:%S')
-    rocket_name = upcoming_launch['rocket']['name']
-    launchpad_name = upcoming_launch['launchpad']['name']
-    launchpad_locality = upcoming_launch['launchpad']['locality']
+        # Rocket details
+        rocket_id = upcoming_launch['rocket']
+        rocket_url = 'https://api.spacexdata.com/v4/rockets/{}'.format(
+            rocket_id)
+        rocket_response = requests.get(rocket_url)
+        rocket_response.raise_for_status()
+        rocket = rocket_response.json()
+        rocket_name = rocket['name']
 
-    print(f"{launch_name} ({launch_date}) {rocket_name} - {launchpad_name} ({launchpad_locality})")
+        # Launchpad details
+        launchpad_id = upcoming_launch['launchpad']
+        launchpad_url = 'https://api.spacexdata.com/v4/launchpads/{}'.format(
+            launchpad_id)
+        launchpad_response = requests.get(launchpad_url)
+        launchpad_response.raise_for_status()
+        launchpad = launchpad_response.json()
+        launchpad_name = launchpad['name']
+        launchpad_locality = launchpad['locality']
 
-if __name__ == "__main__":
+        date_local = upcoming_launch['date_local']
+
+        print(
+            "{} ({}) {} - {} ({})".format(
+                upcoming_launch['name'], date_local, rocket_name,
+                launchpad_name, launchpad_locality))
+
+    except requests.RequestException as e:
+        print('An error occurred while making an API request: {}'.format(e))
+    except Exception as err:
+        print('A general error occurred: {}'.format(err))
+
+
+if __name__ == '__main__':
     get_upcoming_launch()
