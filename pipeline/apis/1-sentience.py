@@ -4,7 +4,7 @@
     planets of all sentient species.
 """
 
-import requests
+import requests # type: ignore
 
 
 def sentientPlanets():

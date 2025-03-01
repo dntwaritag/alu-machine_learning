@@ -3,7 +3,7 @@
 
 """ Return list of ships"""
 
-import requests
+import requests # type: ignore
 import sys
 import time
 

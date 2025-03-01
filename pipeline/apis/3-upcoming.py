@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Pipeline Api"""
-import requests
+import requests # type: ignore
 from datetime import datetime
 
 

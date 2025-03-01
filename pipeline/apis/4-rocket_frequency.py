@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Pipeline Api"""
-import requests
+import requests # type: ignore
 
 
 if __name__ == '__main__':

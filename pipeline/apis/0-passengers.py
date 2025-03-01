@@ -4,7 +4,7 @@ This module provides a function to get a list of starships
 that can hold a specified number of passengers.
 """
 
-import requests
+import requests # type: ignore
 
 
 def availableShips(passengerCount):
