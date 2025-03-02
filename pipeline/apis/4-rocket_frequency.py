@@ -18,6 +18,8 @@ def count_rocket_launches():
         return
 
     launches = response.json()
+    print("DEBUG: Launches retrieved:", len(launches))  # Debugging output
+
     rocket_count = defaultdict(int)
 
     # Count launches per rocket ID
@@ -26,8 +28,9 @@ def count_rocket_launches():
 
     # Fetch rocket names
     rocket_names = {}
+    base_url = "https://api.spacexdata.com/v4/rockets/"
     for rocket_id in rocket_count.keys():
-        rocket_url = "https://api.spacexdata.com/v4/rockets/{}".format(rocket_id)
+        rocket_url = "{}{}".format(base_url, rocket_id)
         rocket_data = requests.get(rocket_url).json()
         rocket_names[rocket_id] = rocket_data["name"]
 
