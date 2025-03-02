@@ -9,14 +9,14 @@ import requests
 import time
 
 
-def get_user_location(https://github.com/):
+def get_user_location(api_url):
     """
     Fetch and print the location of a GitHub user.
 
     :param api_url: The API URL for the user
     """
     try:
-        response = requests.get(https://github.com/)
+        response = requests.get(api_url)
 
         if response.status_code == 200:
             user_data = response.json()
