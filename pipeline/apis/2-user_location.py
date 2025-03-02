@@ -27,7 +27,7 @@ def get_user_location(api_url):
             rate_limit_reset = int(res.headers.get('X-Ratelimit-Reset', 0))
             current_time = int(time.time())
             wait_time = (rate_limit_reset - current_time) // 60
-            print(f"Reset in {wait_time} min")
+            print("Reset in {} min".format(wait_time))
             sys.exit(1)
 
         elif res.status_code == 404:  # User not found
@@ -40,11 +40,11 @@ def get_user_location(api_url):
             print(location)
 
         else:  # Other unexpected status codes
-            print(f"Error: Status code {res.status_code}")
+            print("Error: Status code {}".format(res.status_code))
             sys.exit(1)
 
     except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
+        print("An error occurred: {}".format(e))
         sys.exit(1)
 
 
