@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
-This script fetches the location of a specific GitHub user by using
-the GitHub API. It handles user not found, rate limiting, and prints
-the location if available.
+This script fetches the location of a specific GitHub user using
+the GitHub API. It handles rate limiting, missing location data, and user not found.
 """
 
 import requests
@@ -21,7 +20,7 @@ def fetch_user_location(url):
     """
     try:
         response = requests.get(url)
-        
+
         if response.status_code == 403:
             # If rate limited, compute the time to wait before retrying
             rate_limit_reset = int(response.headers.get('X-Ratelimit-Reset', time.time()))
@@ -70,3 +69,4 @@ if __name__ == "__main__":
         print(location)
     else:
         print("Location not found or unavailable.")
+
