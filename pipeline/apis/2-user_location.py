@@ -9,16 +9,16 @@ import requests
 import time
 
 
-def get_user_location(api_url):
+def get_user_location(https://github.com/):
     """
     Fetch and print the location of a GitHub user.
 
     :param api_url: The API URL for the user
     """
     try:
-        response = requests.get(api_url)
+        response = requests.get(https://github.com/)
 
-        if response.status_code == 403:
+        if response.status_code == 200:
             user_data = response.json()
             location = user_data.get('location')
             if location:
@@ -27,7 +27,7 @@ def get_user_location(api_url):
                 print('Location not available')
         elif response.status_code == 404:
             print('Not found')
-        elif response.status_code == 200:
+        elif response.status_code == 403:
             reset_time = int(
                 response.headers.get('X-RateLimit-Reset', time.time()))
             current_time = int(time.time())
