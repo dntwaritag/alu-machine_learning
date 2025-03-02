@@ -1,72 +1,52 @@
 #!/usr/bin/env python3
-"""
-This script fetches the location of a specific GitHub user using
-the GitHub API. It handles rate limiting, missing location data, and user not found.
-"""
+
+""" Return the location of a specific GitHub user """
 
 import requests
 import sys
 import time
 
 
-def fetch_user_location(url):
-    """Fetch the location of the user from the GitHub API.
+def get_user_location(api_url):
+    """
+    Fetches the location of a specific GitHub user from the provided API URL.
 
-    Args:
-        url (str): The API URL to fetch user data from.
+    Parameters:
+    api_url (str): The API endpoint URL to fetch user data from.
 
     Returns:
-        str: Location of the user or None if the user doesn't exist.
+    None: Prints the user's location or an error message if not found.
+
+    Raises:
+    requests.exceptions.RequestException: If there's an HTTP request issue.
     """
     try:
-        response = requests.get(url)
+        res = requests.get(api_url)
 
-        if response.status_code == 403:
-            # If rate limited, compute the time to wait before retrying
-            rate_limit_reset = int(response.headers.get('X-Ratelimit-Reset', time.time()))
+        if res.status_code == 403:
+            rate_limit_reset = int(res.headers.get('X-Ratelimit-Reset', 0))
             current_time = int(time.time())
-            wait_time = rate_limit_reset - current_time
-            if wait_time > 0:
-                print(f"Rate limit hit. Reset in {wait_time // 60} minutes.")
-                time.sleep(wait_time + 1)  # Wait for the reset time, and retry the request
-            return fetch_user_location(url)  # Recursively retry
-
-        elif response.status_code == 404:
-            print("User not found.")
-            return None
-
-        elif response.status_code == 200:
-            # If status is OK, return the location from the user data
-            user_data = response.json()
-            location = user_data.get('location', None)
-            
-            if location is None:
-                print("Location is not set in the user's GitHub profile.")
-            return location
-
+            diff = (rate_limit_reset - current_time) // 60
+            print("Reset in {} min".format(diff))
+        elif res.status_code == 404:
+            print("Not found")
+        elif res.status_code == 200:
+            user_data = res.json()
+            location = user_data.get('location', 'Location not provided')
+            print(location)
         else:
-            print(f"Unexpected status code: {response.status_code}")
-            return None
+            error_msg = "Error: Status code {}".format(res.status_code)
+            print(error_msg)
 
-    except requests.RequestException as e:
-        print(f"Error during request: {e}")
-        return None
+    except requests.exceptions.RequestException as e:
+        error_msg = "An error occurred: {}".format(e)
+        print(error_msg)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python3 2-user_location.py <GitHub API URL>")
+    if len(sys.argv) != 2:
+        print("Usage: ./2-user_location.py <API_URL>")
         sys.exit(1)
 
-    # Get the URL from the command line arguments
-    url = sys.argv[1]
-    
-    # Fetch the location
-    location = fetch_user_location(url)
-    
-    # If a location was found, print it
-    if location:
-        print(location)
-    else:
-        print("Location not found or unavailable.")
-
+    api_url = sys.argv[1]
+    get_user_location(api_url)
