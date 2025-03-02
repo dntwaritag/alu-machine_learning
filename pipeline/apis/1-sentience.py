@@ -1,20 +1,29 @@
-peline Api"""
+#!/usr/bin/env python3
+"""
+    Return the list of names of the home
+    planets of all sentient species.
+"""
+
 import requests
 
 
 def sentientPlanets():
-    """returns the list of names of the home planets of all sentient species"""
-    url = "https://swapi-api.hbtn.io/api/species"
-    r = requests.get(url)
-    world_list = []
-    while r.status_code == 200:
-        for species in r.json()["results"]:
-            url = species["homeworld"]
-            if url is not None:
-                ur = requests.get(url)
-                world_list.append(ur.json()["name"])
-        try:
-            r = requests.get(r.json()["next"])
-        except Exception:
-            break
-    return world_list
+    '''
+    Return the list of names of the home
+    planets of all sentient species.
+    '''
+    url = "https://swapi-api.hbtn.io/api/species/?format=json"
+    speciesList = []
+    while url:
+        results = requests.get(url).json()
+        speciesList += results.get('results')
+        url = results.get('next')
+    homePlanets = []
+    for species in speciesList:
+        if species.get('designation') == 'sentient' or \
+           species.get('classification') == 'sentient':
+            url = species.get('homeworld')
+            if url:
+                planet = requests.get(url).json()
+                homePlanets.append(planet.get('name'))
+    return homePlanets
