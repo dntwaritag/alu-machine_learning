@@ -8,7 +8,7 @@ import sys
 import time
 
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     res = requests.get(sys.argv[1])
 
     if res.status_code == 403:
