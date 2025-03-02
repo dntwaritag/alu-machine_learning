@@ -27,13 +27,14 @@ def count_rocket_launches():
     # Fetch rocket names
     rocket_names = {}
     for rocket_id in rocket_count.keys():
-        rocket_url = f"https://api.spacexdata.com/v4/rockets/{rocket_id}"
+        rocket_url = "https://api.spacexdata.com/v4/rockets/{}".format(rocket_id)
         rocket_data = requests.get(rocket_url).json()
         rocket_names[rocket_id] = rocket_data["name"]
 
     # Print formatted results
     for rocket_id, count in rocket_count.items():
-        print(f"{rocket_names[rocket_id]}: {count}")
+        print("{}: {}".format(rocket_names[rocket_id], count))
+
 
 if __name__ == "__main__":
     count_rocket_launches()
