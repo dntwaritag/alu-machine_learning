@@ -38,15 +38,7 @@ def get_user_location(api_url):
             error_msg = "Error: Status code {}".format(res.status_code)
             print(error_msg)
 
-    except requests.exceptions.RequestException as e:
-        error_msg = "An error occurred: {}".format(e)
-        print(error_msg)
+    except requests.exceptions.Request)
 
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: ./2-user_location.py <API_URL>")
-        sys.exit(1)
 
-    api_url = sys.argv[1]
-    get_user_location(api_url)
