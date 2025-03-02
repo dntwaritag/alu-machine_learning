@@ -1,40 +1,29 @@
 #!/usr/bin/env python3
 """
-    Script that displays the number of launches per rocket.
+Uses the (unofficial) SpaceX API to print the number of launches per rocket as:
+<rocket name>: <number of launches>
+ordered by the number of launches in descending order or,
+if rockets have the same amount of launches, in alphabetical order
 """
 
+
 import requests
-from collections import Counter
-
-
-def get_launch_count_by_rocket():
-    """
-    Get all launches and count them per rocket.
-    """
-    url = "https://api.spacexdata.com/v4/launches"
-    response = requests.get(url)
-    launches = response.json()
-
-    # Count the launches per rocket ID
-    rocket_counts = Counter(launch["rocket"] for launch in launches)
-
-    # Get rocket names
-    url = "https://api.spacexdata.com/v4/rockets"
-    response = requests.get(url)
-    rockets = response.json()
-    rocket_names = {rocket["id"]: rocket["name"] for rocket in rockets}
-
-    # Create a list of (rocket_name, count) and sort it
-    rocket_launch_counts = [
-        (rocket_names[rocket_id], count)
-        for rocket_id, count in rocket_counts.items()
-    ]
-    rocket_launch_counts.sort(key=lambda x: (-x[1], x[0]))
-
-    return rocket_launch_counts
 
 
 if __name__ == "__main__":
-    rocket_launch_counts = get_launch_count_by_rocket()
-    for rocket_name, count in rocket_launch_counts:
-        print("{}: {}".format(rocket_name, count))
+    url = 'https://api.spacexdata.com/v4/launches'
+    results = requests.get(url).json()
+    rocketDict = {}
+    for launch in results:
+        rocket = launch.get('rocket')
+        url = 'https://api.spacexdata.com/v4/rockets/{}'.format(rocket)
+        results = requests.get(url).json()
+        rocket = results.get('name')
+        if rocketDict.get(rocket) is None:
+            rocketDict[rocket] = 1
+        else:
+            rocketDict[rocket] += 1
+    rocketList = sorted(rocketDict.items(), key=lambda kv: kv[0])
+    rocketList = sorted(rocketList, key=lambda kv: kv[1], reverse=True)
+    for rocket in rocketList:
+        print("{}: {}".format(rocket[0], rocket[1]))
