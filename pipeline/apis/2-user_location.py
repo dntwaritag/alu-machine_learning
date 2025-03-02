@@ -43,7 +43,7 @@ def get_user_location(api_url):
         print(error_msg)
 
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     if len(sys.argv) != 2:
         print("Usage: ./2-user_location.py <API_URL>")
         sys.exit(1)
