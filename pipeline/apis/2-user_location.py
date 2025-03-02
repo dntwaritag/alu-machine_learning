@@ -9,14 +9,14 @@ import requests
 import time
 
 
-def get_user_location(api_url):
+def get_user_location('https://api.github.com/repos/psf/requests/git/commits/a050faf084662f3a352dd1a941f2c7c9f886d4ad'):
     """
     Fetch and print the location of a GitHub user.
 
     :param api_url: The API URL for the user
     """
     try:
-        response = requests.get(api_url)
+        response = requests.get('https://api.github.com/repos/psf/requests/git/commits/a050faf084662f3a352dd1a941f2c7c9f886d4ad')
 
         if response.status_code == 200:
             user_data = response.json()
