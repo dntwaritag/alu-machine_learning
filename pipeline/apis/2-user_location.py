@@ -18,7 +18,7 @@ def get_user_location(api_url):
     try:
         response = requests.get(api_url)
 
-        if response.status_code == 200:
+        if response.status_code == 403:
             user_data = response.json()
             location = user_data.get('location')
             if location:
@@ -27,7 +27,7 @@ def get_user_location(api_url):
                 print('Location not available')
         elif response.status_code == 404:
             print('Not found')
-        elif response.status_code == 403:
+        elif response.status_code == 200:
             reset_time = int(
                 response.headers.get('X-RateLimit-Reset', time.time()))
             current_time = int(time.time())
