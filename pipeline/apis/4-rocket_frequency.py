@@ -5,7 +5,7 @@ import requests
 
 if __name__ == '__main__':
     """pipeline api"""
-    url = "https://api.spacexdata.com/v4/launches"
+    url = "https://github.com/r-spacex/SpaceX-API"
     r = requests.get(url)
     rocket_dict = {"5e9d0d95eda69955f709d1eb": 0}
 
