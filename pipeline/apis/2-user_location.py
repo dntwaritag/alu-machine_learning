@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-""" Return the location of a specific GitHub user """
+"""Return the location of a specific GitHub user"""
 
 import requests
 import sys
@@ -23,24 +23,29 @@ def get_user_location(api_url):
     try:
         res = requests.get(api_url)
 
-        if res.status_code == 403:
+        if res.status_code == 403:  # Rate limit exceeded
             rate_limit_reset = int(res.headers.get('X-Ratelimit-Reset', 0))
             current_time = int(time.time())
-            diff = (rate_limit_reset - current_time) // 60
-            print("Reset in {} min".format(diff))
-        elif res.status_code == 404:
+            wait_time = (rate_limit_reset - current_time) // 60
+            print(f"Reset in {wait_time} min")
+            sys.exit(1)
+
+        elif res.status_code == 404:  # User not found
             print("Not found")
-        elif res.status_code == 200:
+            sys.exit(1)
+
+        elif res.status_code == 200:  # Successful request
             user_data = res.json()
             location = user_data.get('location', 'Location not provided')
             print(location)
-        else:
-            error_msg = "Error: Status code {}".format(res.status_code)
-            print(error_msg)
+
+        else:  # Other unexpected status codes
+            print(f"Error: Status code {res.status_code}")
+            sys.exit(1)
 
     except requests.exceptions.RequestException as e:
-        error_msg = "An error occurred: {}".format(e)
-        print(error_msg)
+        print(f"An error occurred: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
