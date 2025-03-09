@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Nginx logs stored in MongoDB:
-Provides statistics on the logs.
 """
 
 from pymongo import MongoClient
