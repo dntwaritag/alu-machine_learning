@@ -1,4 +1,4 @@
-# 0x12-transformer_apps
+# 0x12-Transformer Applications
 This directory contains work with transformer applications and TensorFlow Datasets:
 
 ## Mandatory Tasks:
